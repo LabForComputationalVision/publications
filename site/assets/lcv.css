@@ -1,0 +1,61 @@
+BODY {margin-left:20; margin-top:5; margin-width:15; margin-height:5; font-family:helvetica,arial,sans-serif}
+
+P.titledlist {margin-left: 2.4em; text-indent: -2.4em;  line-height: 1.3; 
+margin-top: 1.8ex; margin-bottom: 1.8ex;}
+
+P.people { margin-top: 0ex; margin-bottom: 0.6ex; margin-left: 12px; 
+text-indent: -12px; }
+
+P.research {margin-top: 1ex; margin-bottom: 1ex;}
+
+UL.compact {list-style-image:none; list-style: inside disc }
+
+ul.tight { margin: 0px; }
+
+ol.tight { margin: 0px; }
+
+LI.software {margin-top: 1ex; margin-bottom: 0ex;}
+
+a:link {text-decoration:none;}
+
+a:visited {text-decoration:none;}
+
+a:hover {color:blue; text-decoration:underline;}
+
+a.pop {text-decoration:none; color:blue;}
+
+td.c {text-align:center; line-height:1;}
+
+td.m {vertical-align:middle; line-height:1;}
+
+td.t {vertical-align:top; line-height:1;}
+
+th.r {color: #FF0000;}
+
+th.compact { vertical-align:baseline; line-height:1;}
+
+td.compact { vertical-align:baseline; line-height:1;}
+
+.fn { text-align:left; color:#000000; }
+
+.un {}
+
+.tableBoxOuter {
+width:99%;
+height:85%;
+}
+
+table.popup {font-size: 10pt;}
+
+input.btn { font-size: 8pt; }
+
+h2.lcv { margin: 0px;
+	 color: #FF0000; }
+
+h1.lcv { margin: 0px;
+	 color: #FF0000; }
+
+.more {
+	display: none; }
+
+pre.tight { margin: 0px; }
