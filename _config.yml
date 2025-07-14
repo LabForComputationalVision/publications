@@ -33,9 +33,12 @@ scholar:
   bibliography_template: bib
   group_by: year
   group_order: descending
-  sort_by: month
+  sort_by: year,month
   order: descending
   bibliography_item_tag: p
+  type_order: ["article", "inproceedings", "incollection", "phdthesis", "mastersthesis", "bachelorsthesis", "techreport"]
+  type_alises:
+    -
 
 
 markdown: kramdown

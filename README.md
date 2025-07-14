@@ -15,3 +15,7 @@ fields (title first, not name first).
 - Run `bundle install` to install all the missing gems listed in the `Gemfile`.
 - From the root directory, run `bundle exec jekyll serve --livereload`, then
   open `localhost:4000` in your browser
+
+## Questions
+
+- how separate conference articles and abstracts? both are `inproceedings`
