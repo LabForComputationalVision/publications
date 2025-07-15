@@ -19,3 +19,4 @@ fields (title first, not name first).
 ## Questions
 
 - how separate conference articles and abstracts? both are `inproceedings`
+- where does abstract text come from?
