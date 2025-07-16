@@ -20,3 +20,6 @@ fields (title first, not name first).
 
 - how separate conference articles and abstracts? both are `inproceedings`
 - where does abstract text come from?
+- issue with last name Martin: https://github.com/inukshuk/bibtex-ruby/issues/169
+    - if necessary, can work around this by cycling through with javascript after but boy that's hacky
+- multiple people with same last name, e.g., Wang
