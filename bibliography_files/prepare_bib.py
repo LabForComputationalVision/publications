@@ -32,10 +32,10 @@ for block in aux.failed_blocks:
     fields = {}
     for field in aux_entry.fields:
         v = fields.get(field.key.lower(), [])
-        v.append(field.value)
+        v.append(field.value.strip('"').strip("'"))
         fields[field.key.lower()] = v
     for k, v in fields.items():
-        entry.set_field(Field(k, ';'.join(v)))
+        entry.set_field(Field(k, '||'.join(v)))
 
 # remove all comments
 library.remove(library.comments)

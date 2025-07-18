@@ -44,6 +44,8 @@ scholar:
     bachelorsthesis: "Bachelors Theses"
     mastersthesis: "Masters Theses"
     techreport: "Tech Reports"
+  details_link: false
+  details_layout: details.html
 
 markdown: kramdown
 kramdown:

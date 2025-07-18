@@ -1,0 +1,34 @@
+---
+---
+<html>
+<head></head>
+<body>
+  <h2>{{ page.entry.title }}</h2>
+  <h3>{{ page.entry.author }}</h3>
+  Published in <i>{{ page.entry.journal }}</i><br>
+
+  <p>DOI: <a href='{{ page.entry.doi }}'>{{ page.entry.doi }}</a></p><br>
+
+  <div id="text3" style="display:inline;">Bibtex:<br>
+      <div id="text1" style="display:inline;">
+          <pre size="-1">{{ page.entry.bibtex }}</pre>
+      </div>
+  </div>
+  <br>
+
+  <p>Download:
+      <li>
+          <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
+      </li>
+      {% assign links = page.entry.dl-url | split: '|' %}
+      {% assign titles = page.entry.dl-title | split: '|' %}
+  </p>
+
+  <hr size="1" noshade="">
+  <p>{{ page.entry.abstract }}</p>
+  <hr size="1" noshade="">
+  <li>
+      <a href="/publications">Listing of all publications</a>
+  </li>
+</body>
+</html>
