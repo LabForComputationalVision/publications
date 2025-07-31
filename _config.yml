@@ -29,7 +29,6 @@ plugins:
   - jekyll/scholar
 
 scholar:
-  style: /assets/apa.csl
   bibliography_template: bib
   bibliography: test.bib
   group_by: year

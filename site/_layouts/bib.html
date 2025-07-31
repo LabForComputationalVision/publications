@@ -1,6 +1,49 @@
 ---
 ---
 
-{{ reference }}.
+<b>{{ entry.title }}</b>
+<br>
+{{ entry.author }}.
 
+{% case entry.type %}
+{% when "article" %}
+  <i>{{ entry.journal }}</i>,
+  {% include finicky_bits.html details="volume" value=entry.volume %}
+  {% include finicky_bits.html details="number" value=entry.number %}
+  {% include finicky_bits.html details="pages" value=entry.pages %}
+  {{ entry.year }}.
+{% when "inproceedings" %}
+  <i>{{ entry.booktitle }}</i>,
+  {% include finicky_bits.html details="volume" value=entry.volume %}
+  {% include finicky_bits.html details="number" value=entry.number %}
+  {% include finicky_bits.html details="pages" value=entry.pages %}
+  {{ entry.year }}.
+{% when "incollection" %}
+  <i>{{ entry.booktitle }}</i>,
+  {% include finicky_bits.html details="pages" value=entry.pages %}
+  {{ entry.publisher }}, {{ entry.month | capitalize }} {{ entry.year }}.
+{% when "techreport" %}
+  {{ entry.institution }}, Technical Report {{ entry.number }},
+  {{ entry.month | capitalize }} {{ entry.year }}.
+{% when "phdthesis" %}
+  PhD thesis, {{ entry.school }},
+  {% include finicky_bits.html details="address" value=entry.address %}
+  {{ entry.month | capitalize }} {{ entry.year }}.
+{% when "mastersthesis" %}
+  MS thesis, {{ entry.school }},
+  {% include finicky_bits.html details="address" value=entry.address %}
+  {{ entry.month | capitalize }} {{ entry.year }}.
+{% when "bachelorsthesis" %}
+  BS thesis, {{ entry.school }},
+  {% include finicky_bits.html details="address" value=entry.address %}
+  {{ entry.month | capitalize }} {{ entry.year }}.
+{% else %}
+  {{ entry.type }}, {{ entry.month | capitalize }} {{ entry.year }}.
+{% endcase %}
+
+{% include finicky_bits.html details="other" value=entry.other %}
+
+<br>
 <a href='{% details_link key %}'>Abstract</a>
+{% include finicky_bits.html details="pdf-url" value=entry.pdf-url %}
+{% include finicky_bits.html details="ps-url" value=entry.ps-url %}

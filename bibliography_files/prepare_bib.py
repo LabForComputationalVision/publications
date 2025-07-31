@@ -17,7 +17,17 @@ class AddFirstAuthor(m.BlockMiddleware):
             entry["first_author"] = author[0]
         return entry
 
-middlewares = [m.NormalizeFieldKeys(), m.SeparateCoAuthors(), m.SplitNameParts(), AddFirstAuthor()]
+# tech reports can have a "type" field, which confuses the parser for
+# ruby-bibtex (duplicate with "entry type", e.g., article, inproceedings)
+class ConvertTechReportType(m.BlockMiddleware):
+    def transform_entry(self, entry, *args, **kwargs):
+        type_field = entry.pop("type")
+        if type_field:
+            entry["techreport_type"] = type_field.value
+        return entry
+
+middlewares = [m.NormalizeFieldKeys(), ConvertTechReportType(),
+               m.SeparateCoAuthors(), m.SplitNameParts(), AddFirstAuthor()]
 library = bibtexparser.parse_file(sys.argv[1],
                                   append_middleware=middlewares)
 aux = bibtexparser.parse_file(sys.argv[2], append_middleware=[m.NormalizeFieldKeys()])

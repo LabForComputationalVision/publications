@@ -4,9 +4,6 @@ Static site for showing publications
 
 For now, don't include bibfile.
 
-Uses custom version of apa.csl (citation style file), so we can reorder the
-fields (title first, not name first).
-
 ## Building locally
 
 - Install Jekyll's [requirements](https://jekyllrb.com/docs/installation/)
@@ -32,3 +29,5 @@ fields (title first, not name first).
 - link to e.g., Liam's website on abstract page?
     - same with journal link
 - have prepare_bib raise informative errors on some validation?
+
+- pdf-url field always included? or folder on webserver?

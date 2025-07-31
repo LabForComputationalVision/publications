@@ -1,0 +1,18 @@
+{% if include.value %}
+{% case include.details %}
+{% when "volume" %}
+vol.{{ include.value }}
+{% when "number" %}
+({{ include.value }}),
+{% when "pages" %}
+ pp. {{ include.value }},
+{% when "address" %}
+{{ include.value }},
+{% when "other" %}
+<br>{{ include.value }}
+{% when "pdf-url" %}
+ | <a href="{{ include.value }}">PDF</a>
+{% when "ps-url" %}
+ | <a href="{{ include.value }}">PS</a>
+{% endcase %}
+{% endif %}
