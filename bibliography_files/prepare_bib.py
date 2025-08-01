@@ -35,7 +35,57 @@ class AddOrigBibtex(m.BlockMiddleware):
         return entry
 
 def main(bib: str, out: str, aux: str | None,
-         abstracts: str | None):
+         abstracts: str | None, author_url: str | None,
+         journal_url: str | None):
+
+    additional_middleware = []
+
+    authors = {}
+    if author_url is not None:
+        with open(author_url) as f:
+            author_url = f.readlines()
+        author_url = {a.split("=")[0].strip().replace(" ", ""): a.split("=")[1].strip().strip('"').strip("'")
+                      for a in author_url if a.strip()}
+    class RenderAuthors(m.BlockMiddleware):
+        def transform_entry(self, entry, *args, **kwargs):
+            authors = entry.get("author")
+            if authors:
+                author_str = ""
+                for i, author in enumerate(authors.value):
+                    if url := author_url.get(author.replace(" ", "")):
+                        author_str += f"<i><a href={url}>{author}</a></i>"
+                    else:
+                        author_str += f"<i>{author}</i>"
+                    if i == len(authors.value) - 2:
+                        author_str += " and "
+                    elif i == len(authors.value) - 1:
+                        author_str += "."
+                    else:
+                        author_str += ", "
+                entry["rendered_author"] = author_str
+            return entry
+    additional_middleware.append(RenderAuthors())
+
+    journals = {}
+    if journal_url is not None:
+        with open(journal_url) as f:
+            journal_url = f.readlines()
+        journal_url = {j.split("=")[0].strip().replace(" ", "").lower(): j.split("=")[1].strip().strip('"').strip("'")
+                      for j in journal_url if j.strip()}
+    class RenderJournals(m.BlockMiddleware):
+        def transform_entry(self, entry, *args, **kwargs):
+            journal = entry.get("journal")
+            if not journal:
+                journal = entry.get("booktitle")
+            if journal:
+                journal = journal.value
+                if url := journal_url.get(journal.replace(" ", "").lower()):
+                    journal_str = f"<a href={url}>{journal}</a>"
+                else:
+                    journal_str = journal
+                entry["rendered_journal"] = journal_str
+            return entry
+    additional_middleware.append(RenderJournals())
 
     if abstracts is not None:
         abstracts = pathlib.Path(abstracts)
@@ -46,13 +96,12 @@ def main(bib: str, out: str, aux: str | None,
                     abstract = abstract_path.read_text()
                     entry["abstract"] = abstract
                 return entry
-        add_abstract = [AddAbstract()]
-    else:
-        add_abstract = []
+        additional_middleware.append(AddAbstract())
 
-    middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertTechReportType()]
-    middlewares += add_abstract
-    middlewares += [m.SeparateCoAuthors(), m.SplitNameParts(), AddFirstAuthor(), m.MergeNameParts(),
+    middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertTechReportType(),
+                   m.SeparateCoAuthors()]
+    middlewares += additional_middleware
+    middlewares += [m.SplitNameParts(), AddFirstAuthor(), m.MergeNameParts(),
                     m.MergeCoAuthors()]
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
     if aux is not None:
@@ -100,5 +149,9 @@ if __name__ == '__main__':
                         help="Path to the .bibaux file with additional info. See Readme for details.")
     parser.add_argument("--abstracts", default=None,
                         help="Path to the folder containing abstract files. See Readme for details")
+    parser.add_argument("--author_url", default=None,
+                        help="Path to the txt file containing author urls. See Readme for details")
+    parser.add_argument("--journal_url", default=None,
+                        help="Path to the txt file containing journal urls. See Readme for details")
     args = vars(parser.parse_args())
     main(**args)

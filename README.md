@@ -44,7 +44,8 @@ For now, don't include bibfile.
   - [ ] [last name Martin](https://github.com/inukshuk/jekyll-scholar/issues/366) parsed as date
   - [ ] [group names](https://github.com/inukshuk/jekyll-scholar/issues/367) not being rendered correctly
 - [ ] both those can be fixed by running sed afterwards if necessary
-- [ ] author and journal urls
+- [x] author and journal urls
+- [ ] exclude/filter
 - [x] popup
 - [ ] put together build script
 - [ ] include htmlproofer as post build step

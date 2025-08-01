@@ -1,16 +1,10 @@
 {% case include.mode %}
 {% when "bibliography" %}
 {% assign post_author = "" %}
-{% assign pre_journal = "" %}
-{% assign pre_conference = "" %}
 {% when "superseded" %}
 {% assign post_author = "<br>" %}
-{% assign pre_journal = "" %}
-{% assign pre_conference = "" %}
 {% when "details" %}
 {% assign post_author = "" %}
-{% assign pre_journal = "Published in" %}
-{% assign pre_conference = "Presented at" %}
 {% endcase %}
 
 {%- if include.mode != "details" -%}
@@ -22,19 +16,31 @@
 
 {% case include.entry.type %}
 {% when "article" %}
-  {{ pre_journal }}<i>{{ include.entry.journal }}</i>,
+  {%-  if include.mode == "details" -%}
+    Published in <i>{{ include.entry.rendered_journal }}</i>,
+  {%- else -%}
+    <i>{{ include.entry.journal }}</i>,
+  {%- endif -%}
   {% include finicky_bits.html details="volume" value=include.entry.volume %}
   {% include finicky_bits.html details="number" value=include.entry.number %}
   {% include finicky_bits.html details="pages" value=include.entry.pages %}
   {{ include.entry.month | capitalize }} {{ include.entry.year }}.
 {% when "inproceedings" %}
-  {{ pre_conference }}<i>{{ include.entry.booktitle }}</i>,
+  {%-  if include.mode == "details" -%}
+    Presented at <i>{{ include.entry.rendered_journal }}</i>,
+  {%- else -%}
+    <i>{{ include.entry.booktitle }}</i>,
+  {%- endif -%}
   {% include finicky_bits.html details="volume" value=include.entry.volume %}
   {% include finicky_bits.html details="number" value=include.entry.number %}
   {% include finicky_bits.html details="pages" value=include.entry.pages %}
   {{ include.entry.month | capitalize }} {{ include.entry.year }}.
 {% when "incollection" %}
-  {{ pre_journal }}<i>{{ include.entry.booktitle }}</i>,
+  {%-  if include.mode == "details" -%}
+    Presented at <i>{{ include.entry.rendered_journal }}</i>,
+  {%- else -%}
+    <i>{{ include.entry.booktitle }}</i>,
+  {%- endif -%}
   {% include finicky_bits.html details="pages" value=include.entry.pages %}
   {{ include.entry.publisher }}, {{ include.entry.month | capitalize }} {{ include.entry.year }}.
 {% when "techreport" %}

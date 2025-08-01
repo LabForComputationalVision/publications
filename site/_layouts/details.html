@@ -7,7 +7,7 @@
     </head>
     <body>
         <h2>{{ page.entry.title }}</h2>
-        <h3>{% include authors.html where="abstract" value=page.entry.author %}</h3>
+        <h3>{{ page.entry.rendered_author }}</h3>
         {% include reference.html entry=page.entry mode="details" %}<br>
         {% include finicky_bits.html details="doi" value=page.entry.doi %}
 
