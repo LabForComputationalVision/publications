@@ -31,7 +31,7 @@ plugins:
 scholar:
   bibliography_template: bib
   bibliography: test.bib
-  group_by: year
+  group_by: none
   sort_by: year,month
   order: descending
   bibliography_item_tag: p

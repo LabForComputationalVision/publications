@@ -1,34 +1,71 @@
 ---
 ---
 <html>
-<head></head>
-<body>
-  <h2>{{ page.entry.title }}</h2>
-  <h3>{{ page.entry.author }}</h3>
-  Published in <i>{{ page.entry.journal }}</i><br>
+    {%- include head.html -%}
+    <head>
+        <script type="text/javascript" src="{{ "/assets/show_hide.js" | relative_url }}"></script>
+    </head>
+    <body>
+        <h2>{{ page.entry.title }}</h2>
+        <h3>{% include authors.html where="abstract" value=page.entry.author %}</h3>
+        {% include reference.html entry=page.entry mode="details" %}<br>
+        {% include finicky_bits.html details="doi" value=page.entry.doi %}
 
-  <p>DOI: <a href='{{ page.entry.doi }}'>{{ page.entry.doi }}</a></p><br>
+        {%-  if page.entry.superseded_by -%}
+            <p>This paper has been superseded by:<br>
+                {% assign superseded = page.entry.superseded_by | split: '||'  %}
+                {% for supersed in superseded %}
+                <a href="{{ supersed }}">
+                    {% bibliography --query @*[key={{supersed}}] --template superseded %}
+                </a>
+                {% endfor %}
+            </p>
+        {%- endif -%}
 
-  <div id="text3" style="display:inline;">Bibtex:<br>
-      <div id="text1" style="display:inline;">
-          <pre size="-1">{{ page.entry.bibtex }}</pre>
-      </div>
-  </div>
-  <br>
+        <div id="text3" style="display:inline;">Bibtex: <a id="showhide" href="javascript:void(0)" onClick="javascript:show_hide()">[show]</a><br>
+            <div id="bibtex" style="display:none;">
+                <pre size="-1">{{ page.entry.original_bibtex }}</pre>
+            </div>
+        </div>
 
-  <p>Download:
-      <li>
-          <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
-      </li>
-      {% assign links = page.entry.dl-url | split: '|' %}
-      {% assign titles = page.entry.dl-title | split: '|' %}
-  </p>
+        <p>Download:
+            <li>
+                <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
+            </li>
+            {% assign download = page.entry.download | split: '||'  %}
+            {% for dl in download %}
+                {% assign dl_split = dl | split: '|' %}
+                <li>
+                    <a href="{{ dl_split[1] }}">{{ dl_split[0] }}</a>
+                </li>
+            {% endfor %}
+        </p>
 
-  <hr size="1" noshade="">
-  <p>{{ page.entry.abstract }}</p>
-  <hr size="1" noshade="">
-  <li>
-      <a href="/publications">Listing of all publications</a>
-  </li>
-</body>
+        <hr size="1" noshade="">
+        <p>{{ page.entry.abstract }}</p>
+        <hr size="1" noshade="">
+        {% if page.entry.supersedes %}
+            <li>
+                Superseded Publications:
+                {% assign supersedes = page.entry.supersedes | split: '||'  %}
+                {% for supersed in supersedes %}
+                    {%- unless forloop.first -%},{%- endunless -%}
+                    <a href="{{ supersed }}.html">{{ supersed }}</a>
+                {% endfor %}
+            </li>
+        {% endif %}
+        {% if page.entry.related %}
+            <li>
+                Related Publications:
+                {% assign related = page.entry.related | split: '||'  %}
+                {%- for relat in related -%}
+                    {%- unless forloop.first %},{%- endunless %}
+                    <a href="{{ relat }}.html">{{ relat }}</a>
+                {%- endfor -%}
+            </li>
+        {% endif %}
+        <li>
+            <a href="/publications/index.html">Listing of all publications</a>
+        </li>
+    </body>
 </html>

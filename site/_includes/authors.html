@@ -1,0 +1,19 @@
+{% assign authors = include.value | split: ' and ' %}
+{% if include.where == "abstract" %}
+    {% assign start = "<i>" %}
+    {% assign end = "</i>" %}
+{% else %}
+    {% assign start = "" %}
+    {% assign end = "" %}
+{% endif %}
+{% for author in authors -%}
+    {%- unless forloop.first -%}
+        {% if forloop.last %}
+            and
+        {% else -%}
+            ,
+        {% endif -%}
+    {%- endunless -%}
+    {{- start -}}{{ author | split: ', ' | reverse | join: ' ' }}{{- end -}}
+{% endfor -%}
+.

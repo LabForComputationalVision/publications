@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 
+import pathlib
 import sys
 import subprocess
 import bibtexparser
 from bibtexparser.model import Field
 import bibtexparser.middlewares as m
+
+abstract_dir = pathlib.Path(sys.argv[3])
+translate_brackets = str.maketrans({"{": r"\{", "}": r"\}"})
 
 class AddFirstAuthor(m.BlockMiddleware):
     def transform_entry(self, entry, *args, **kwargs):
@@ -26,8 +30,22 @@ class ConvertTechReportType(m.BlockMiddleware):
             entry["techreport_type"] = type_field.value
         return entry
 
-middlewares = [m.NormalizeFieldKeys(), ConvertTechReportType(),
-               m.SeparateCoAuthors(), m.SplitNameParts(), AddFirstAuthor()]
+class AddOrigBibtex(m.BlockMiddleware):
+    def transform_entry(self, entry, *args, **kwargs):
+        entry["original_bibtex"] = entry.raw.translate(translate_brackets)
+        return entry
+
+class AddAbstract(m.BlockMiddleware):
+    def transform_entry(self, entry, *args, **kwargs):
+        abstract_path = abstract_dir / f"{entry.key}-abstract.txt"
+        if abstract_path.exists():
+            abstract = abstract_path.read_text()
+            entry["abstract"] = abstract
+        return entry
+
+middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertTechReportType(), AddAbstract(),
+               m.SeparateCoAuthors(), m.SplitNameParts(), AddFirstAuthor(), m.MergeNameParts(),
+               m.MergeCoAuthors()]
 library = bibtexparser.parse_file(sys.argv[1],
                                   append_middleware=middlewares)
 aux = bibtexparser.parse_file(sys.argv[2], append_middleware=[m.NormalizeFieldKeys()])
@@ -46,12 +64,17 @@ for block in aux.failed_blocks:
         fields[field.key.lower()] = v
     for k, v in fields.items():
         entry.set_field(Field(k, '||'.join(v)))
+# go through and add superseded_by to entries
+for entry in library.entries:
+    if supersedes := entry.fields_dict.get("supersedes"):
+        for old_entry in supersedes.value.split("||"):
+            old_entry = library.entries_dict[old_entry]
+            if superseded := old_entry.get("superseded_by"):
+                superseded = f"||{superseded.value}"
+            else:
+                superseded = ""
+            old_entry.set_field(Field("superseded_by", entry.key + superseded))
 
 # remove all comments
 library.remove(library.comments)
-bibtexparser.write_file(sys.argv[3], library,
-                        append_middleware=[m.MergeNameParts(), m.MergeCoAuthors()])
-# bibtexparser writes these warning comments, which confuse jekyll-scholar, so remove them
-proc = subprocess.run(["grep", "-v", "% WARNING", sys.argv[2]], capture_output=True)
-with open(sys.argv[2], "w") as f:
-    f.write(proc.stdout.decode())
+bibtexparser.write_file(sys.argv[4], library)

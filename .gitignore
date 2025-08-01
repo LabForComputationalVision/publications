@@ -15,5 +15,7 @@ _site/
 /ignored
 
 *.bib*
+bibliography_files/abstracts
+extra_files/
 
 .auctex-auto

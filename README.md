@@ -31,3 +31,21 @@ For now, don't include bibfile.
 - have prepare_bib raise informative errors on some validation?
 
 - pdf-url field always included? or folder on webserver?
+- abstract-url field? looks redundant
+- how to handle chain of superseding? if A supersedes B which supersedes C, should C point to A or B? currently, B (matching original website)
+
+## Notes
+
+- To find non-unicode characters, run `grep -axv '.*' PATH`. Then remove the offending character in text editor.
+
+## TODO
+
+- [ ] open issues: 
+  - [ ] [last name Martin](https://github.com/inukshuk/jekyll-scholar/issues/366) parsed as date
+  - [ ] [group names](https://github.com/inukshuk/jekyll-scholar/issues/367) not being rendered correctly
+- [ ] both those can be fixed by running sed afterwards if necessary
+- [x] author and journal urls
+- [ ] popup
+- [ ] put together build script
+- [ ] include htmlproofer as post build step
+- [ ] document "extras", in bibaux file and abstract folder

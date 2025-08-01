@@ -1,0 +1,57 @@
+{% case include.mode %}
+{% when "bibliography" %}
+{% assign post_author = "" %}
+{% assign pre_journal = "" %}
+{% assign pre_conference = "" %}
+{% when "superseded" %}
+{% assign post_author = "<br>" %}
+{% assign pre_journal = "" %}
+{% assign pre_conference = "" %}
+{% when "details" %}
+{% assign post_author = "" %}
+{% assign pre_journal = "Published in" %}
+{% assign pre_conference = "Presented at" %}
+{% endcase %}
+
+{%- if include.mode != "details" -%}
+<b>{{ include.entry.title }}</b>
+<br>
+{{ include.entry.author }}.
+{{ post_author }}
+{% endif %}
+
+{% case include.entry.type %}
+{% when "article" %}
+  {{ pre_journal }}<i>{{ include.entry.journal }}</i>,
+  {% include finicky_bits.html details="volume" value=include.entry.volume %}
+  {% include finicky_bits.html details="number" value=include.entry.number %}
+  {% include finicky_bits.html details="pages" value=include.entry.pages %}
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "inproceedings" %}
+  {{ pre_conference }}<i>{{ include.entry.booktitle }}</i>,
+  {% include finicky_bits.html details="volume" value=include.entry.volume %}
+  {% include finicky_bits.html details="number" value=include.entry.number %}
+  {% include finicky_bits.html details="pages" value=include.entry.pages %}
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "incollection" %}
+  {{ pre_journal }}<i>{{ include.entry.booktitle }}</i>,
+  {% include finicky_bits.html details="pages" value=include.entry.pages %}
+  {{ include.entry.publisher }}, {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "techreport" %}
+  {{ include.entry.institution }}, Technical Report {{ include.entry.number }},
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "phdthesis" %}
+  PhD thesis, {{ include.entry.school }},
+  {% include finicky_bits.html details="address" value=include.entry.address %}
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "mastersthesis" %}
+  MS thesis, {{ include.entry.school }},
+  {% include finicky_bits.html details="address" value=include.entry.address %}
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% when "bachelorsthesis" %}
+  BS thesis, {{ include.entry.school }},
+  {% include finicky_bits.html details="address" value=include.entry.address %}
+  {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% else %}
+  {{ include.entry.type }}, {{ include.entry.month | capitalize }} {{ include.entry.year }}.
+{% endcase %}

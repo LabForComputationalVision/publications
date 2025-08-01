@@ -14,5 +14,7 @@ vol.{{ include.value }}
  | <a href="{{ include.value }}">PDF</a>
 {% when "ps-url" %}
  | <a href="{{ include.value }}">PS</a>
+{% when "doi" %}
+ <p>DOI: <a href="{{ include.value }}">{{ include.value }}</a></p>
 {% endcase %}
 {% endif %}
