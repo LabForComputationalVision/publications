@@ -45,27 +45,49 @@
         <p>{{ page.entry.abstract }}</p>
         <hr size="1" noshade="">
         {% if page.entry.supersedes %}
+            {% assign supersedes = page.entry.supersedes | split: '||'  %}
             <li>
                 Superseded Publications:
-                {% assign supersedes = page.entry.supersedes | split: '||'  %}
                 {% for supersed in supersedes %}
                     {%- unless forloop.first -%},{%- endunless -%}
-                    <a href="{{ supersed }}.html">{{ supersed }}</a>
+                    <a class="needs-tips" id="{{ supersed }}" href="{{ supersed }}.html">{{ supersed }}</a>
                 {% endfor %}
             </li>
+            {% for supersed in supersedes %}
+                <div id="{{ supersed }}-tip" style="display:none">
+                    {% bibliography --query @*[key={{supersed}}] --template superseded --bibliography_list_tag p %}
+                </div>
+            {% endfor %}
         {% endif %}
         {% if page.entry.related %}
+            {% assign related = page.entry.related | split: '||'  %}
             <li>
                 Related Publications:
-                {% assign related = page.entry.related | split: '||'  %}
                 {%- for relat in related -%}
                     {%- unless forloop.first %},{%- endunless %}
-                    <a href="{{ relat }}.html">{{ relat }}</a>
+                    <a class="needs-tips" id="{{ relat }}" href="{{ relat }}.html">{{ relat }}</a>
                 {%- endfor -%}
             </li>
+            {% for relat in related %}
+                <div id="{{ relat }}-tip" style="display:none">
+                    {% bibliography --query @*[key={{relat}}] --template superseded --bibliography_list_tag p %}
+                </div>
+            {% endfor %}
         {% endif %}
         <li>
             <a href="/publications/index.html">Listing of all publications</a>
         </li>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://unpkg.com/tippy.js@6"></script>
+        <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css"/>
+        <script type="text/javascript">
+         tippy('.needs-tips', {
+             content: (reference) => $("#" + reference.getAttribute("id") + "-tip").html(),
+             allowHTML: true,
+             placement: "right",
+             theme: 'light',
+             maxWidth: '',
+         })
+        </script>
     </body>
 </html>
