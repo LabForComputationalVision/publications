@@ -15,9 +15,15 @@ class AddFirstAuthor(m.BlockMiddleware):
         if author:
             author = author.value[0].last
             assert len(author) == 1
-            if author[0][0] == "{":
-                author[0] = author[0][1:-1]
-            entry["first_author"] = author[0]
+            author = author[0]
+            if author[0] == "{":
+                author = author[1:-1]
+            # bug https://github.com/inukshuk/jekyll-scholar/issues/366
+            for month in ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]:
+                if author.startswith(month):
+                    author = author.replace(month, f"{month[:2]}-{month[2]}")
+            entry["first_author"] = author
         return entry
 
 # tech reports can have a "type" field, which confuses the parser for
