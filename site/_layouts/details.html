@@ -51,12 +51,24 @@
                 Superseded Publications:
                 {% for supersed in supersedes %}
                     {%- unless forloop.first -%},{%- endunless -%}
-                    <a class="needs-tips" id="{{ supersed }}" href="{{ supersed }}.html">{{ supersed }}</a>
+                    {% assign sup = supersed | split: '|'  %}
+                    {% if sup.size > 1 %}
+                        {% assign href = sup[1] %}
+                    {% else %}
+                        {% assign href = sup[0] %}
+                    {% endif %}
+                    <a class="needs-tips" id="{{ href }}" href="{{ href }}.html">{{ sup[0] }}</a>
                 {% endfor %}
             </li>
             {% for supersed in supersedes %}
-                <div id="{{ supersed }}-tip" style="display:none">
-                    {% bibliography --query @*[key={{supersed}}] --template superseded --bibliography_list_tag p %}
+                {% assign sup = supersed | split: '|'  %}
+                {% if sup.size > 1 %}
+                    {% assign href = sup[1] %}
+                {% else %}
+                    {% assign href = sup[0] %}
+                {% endif %}
+                <div id="{{ href }}-tip" style="display:none">
+                    {% bibliography --query @*[key={{href}}] --template superseded --bibliography_list_tag p %}
                 </div>
             {% endfor %}
         {% endif %}
@@ -67,7 +79,7 @@
                 {%- for relat in related -%}
                     {%- unless forloop.first %},{%- endunless %}
                     {% assign rel = relat | split: '|'  %}
-                    {% if rel | size > 1 %}
+                    {% if rel.size > 1 %}
                         {% assign href = rel[1] %}
                     {% else %}
                         {% assign href = rel[0] %}
@@ -77,7 +89,7 @@
             </li>
             {% for relat in related %}
                 {% assign rel = relat | split: '|' %}
-                {% if rel | size > 1 %}
+                {% if rel.size > 1 %}
                     {% assign href = rel[1] %}
                 {% else %}
                     {% assign href = rel[0] %}
