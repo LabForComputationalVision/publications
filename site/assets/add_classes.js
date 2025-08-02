@@ -9,7 +9,6 @@ $.when( $.ready ).then(function() {
     group_headers.first().before(
         "<div id=links>"+ group_headers_text.join(" | ") +"</div>"
     )
-    console.log(group_headers_text.join("|"))
     group_headers.wrap(function() {
         return "<div id='divider'><div id='divider-left'><a class='divider' name='" + $(this).text() + "'></a></div><div id='divider-right'><a class='divider' href='#top'>top</a></div></div>"
     })
