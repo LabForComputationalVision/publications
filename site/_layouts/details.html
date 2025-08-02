@@ -31,9 +31,11 @@
         </div>
 
         Download:
-        <li>
-            <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
-        </li>
+        {% if page.entry.pdf-url %}
+            <li>
+                <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
+            </li>
+        {% endif %}
         {% assign download = page.entry.download | split: '||'  %}
         {% for dl in download %}
             {% assign dl_split = dl | split: '|' %}
