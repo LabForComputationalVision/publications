@@ -20,4 +20,4 @@ mv _site publications
 mkdir _site
 mv publications _site/publications
 # not sure how to get paths working correctly here
-bundle exec htmlproofer ./_site --checks Link,Scripts,Images
+bundle exec htmlproofer _site --checks Links,Scripts,Images
