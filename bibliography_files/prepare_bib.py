@@ -26,13 +26,13 @@ class AddFirstAuthor(m.BlockMiddleware):
             entry["first_author"] = author
         return entry
 
-# tech reports can have a "type" field, which confuses the parser for
-# ruby-bibtex (duplicate with "entry type", e.g., article, inproceedings)
-class ConvertTechReportType(m.BlockMiddleware):
+# some entries have a "type" field, which confuses the parser for ruby-bibtex
+# (duplicate with "entry type", e.g., article, inproceedings)
+class ConvertType(m.BlockMiddleware):
     def transform_entry(self, entry, *args, **kwargs):
         type_field = entry.pop("type")
         if type_field:
-            entry["techreport_type"] = type_field.value
+            entry["addt_type"] = type_field.value
         return entry
 
 class AddOrigBibtex(m.BlockMiddleware):
@@ -104,14 +104,14 @@ def main(bib: str, out: str, aux: str | None,
                 return entry
         additional_middleware.append(AddAbstract())
 
-    middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertTechReportType(),
+    middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertType(),
                    m.SeparateCoAuthors()]
     middlewares += additional_middleware
     middlewares += [m.SplitNameParts(), AddFirstAuthor(), m.MergeNameParts(),
                     m.MergeCoAuthors()]
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
     if aux is not None:
-        aux = bibtexparser.parse_file(aux, append_middleware=[m.NormalizeFieldKeys()])
+        aux = bibtexparser.parse_file(aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType()])
         for aux_entry in aux.entries:
             entry = library.entries_dict[aux_entry.key]
             for field in aux_entry.fields:

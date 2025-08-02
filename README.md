@@ -32,7 +32,9 @@ For now, don't include bibfile.
 
 - pdf-url field always included? or folder on webserver?
 - abstract-url field? looks redundant
-- how to handle chain of superseding? if A supersedes B which supersedes C, should C point to A or B? currently, B (matching original website)
+- how to handle chain of superseding? if A supersedes B which supersedes C, should C point to A or B? currently, A and B (original website just had B)
+- what are POSTER/TALK? they don't seem to be used
+- what's going on with the | in the journalURL file?
 
 ## Notes
 
@@ -45,7 +47,9 @@ For now, don't include bibfile.
   - [ ] [group names](https://github.com/inukshuk/jekyll-scholar/issues/367) not being rendered correctly
 - [ ] both those can be fixed by running sed afterwards if necessary
 - [x] author and journal urls
-- [ ] exclude/filter
+- [x] exclude/filter
+    - CONFABSTRACT is an extra type that comes from bibaux, handle that like tech report type
+    - POSTER/TALK appear to still not exist
 - [x] popup
 - [ ] put together build script
 - [ ] include htmlproofer as post build step

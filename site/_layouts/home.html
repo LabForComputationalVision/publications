@@ -7,11 +7,30 @@ layout: default
   <a name="top"></a>
   <h1 id="pagetitle">Selected Online Publications</h1>
 
-  <p>Sort by:&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="index.html">Year</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="type.html">Type</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="author.html">First Author</a>
-  </p>
+  <table>
+    <tbody>
+      <tr>
+        <td colspan="2">
+          Sort by:&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="index.html">Year</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="type.html">Type</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="author.html">First Author</a>
+        </td>
+      </tr>
+
+      <tr>
+        <td valign="top">
+          Exclude:&nbsp;&nbsp;&nbsp;
+        </td>
+        <td>
+          <div class="nowrap"><input id="superseded" type="checkbox" onchange="toggle_visibility(this)">Superseded Publications&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="nowrap"><input id="inproceedings" type="checkbox" onchange="toggle_visibility(this)">Conference Articles&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="nowrap"><input id="conf-abstract" type="checkbox" onchange="toggle_visibility(this)">Conference Abstracts&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="nowrap"><input id="exgroup" type="checkbox" onchange="toggle_visibility(this)">Book Chapters, Theses, Tech Reports & Other</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   {{ content }}
 

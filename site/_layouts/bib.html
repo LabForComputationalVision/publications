@@ -1,5 +1,24 @@
 ---
 ---
+{% assign class = "" %}
+{% if entry.superseded_by %}
+  {% assign class = class | append: "superseded" %}
+{% endif %}
+{% case entry.type %}
+{% when "incollection", "phdthesis", "mastersthesis", "bachelorsthesis", "techreport" %}
+  {% assign class = class | append: " exgroup" %}
+{% endcase %}
+{% if entry.addt_type == "CONFABSTRACT" %}
+  {% assign class = class | append: " conf-abstract" %}
+{% elsif entry.type == "inproceedings" %}
+  {% assign class = class | append: " inproceedings" %}
+{% endif %}
+{% if class != "" %}
+<div class="{{ class }}">
+{% else %}
+<div>
+{% endif %}
+
 {% include reference.html entry=entry mode="bibliography" %}
 {% include finicky_bits.html details="other" value=entry.other %}
 
@@ -7,3 +26,5 @@
 <a href='{% details_link key %}'>Abstract</a>
 {% include finicky_bits.html details="pdf-url" value=entry.pdf-url %}
 {% include finicky_bits.html details="ps-url" value=entry.ps-url %}
+
+</div>

@@ -45,3 +45,9 @@ a.divider:link{ color: #FF0000; text-decoration: none; }
 a.divider:visited { color: #FF0000; text-decoration: none; }
 a.divider:hover { color: #FF0000; text-decoration: underline; }
 a.divider:active { color: #FF0000; text-decoration: none; }
+
+div.nowrap {
+    white-space: nowrap;
+    hyphens: none;
+    display: inline;
+}
