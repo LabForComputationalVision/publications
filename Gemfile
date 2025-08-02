@@ -38,3 +38,5 @@ gem "ostruct"
 gem "base64"
 
 gem "kramdown-parser-gfm"
+
+gem "html-proofer"

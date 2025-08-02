@@ -17,9 +17,9 @@
             <p>This paper has been superseded by:<br>
                 {% assign superseded = page.entry.superseded_by | split: '||'  %}
                 {% for supersed in superseded %}
-                <a href="{{ supersed }}">
-                    {% bibliography --query @*[key={{supersed}}] --template superseded %}
-                </a>
+                    <a href="{{ supersed }}">
+                        {% bibliography --query @*[key={{supersed}}] --template superseded %}
+                    </a>
                 {% endfor %}
             </p>
         {%- endif -%}
@@ -66,12 +66,24 @@
                 Related Publications:
                 {%- for relat in related -%}
                     {%- unless forloop.first %},{%- endunless %}
-                    <a class="needs-tips" id="{{ relat }}" href="{{ relat }}.html">{{ relat }}</a>
+                    {% assign rel = relat | split: '|'  %}
+                    {% if rel | size > 1 %}
+                        {% assign href = rel[1] %}
+                    {% else %}
+                        {% assign href = rel[0] %}
+                    {% endif %}
+                    <a class="needs-tips" id="{{ href }}" href="{{ href }}.html">{{ rel[0] }}</a>
                 {%- endfor -%}
             </li>
             {% for relat in related %}
-                <div id="{{ relat }}-tip" style="display:none">
-                    {% bibliography --query @*[key={{relat}}] --template superseded --bibliography_list_tag p %}
+                {% assign rel = relat | split: '|' %}
+                {% if rel | size > 1 %}
+                    {% assign href = rel[1] %}
+                {% else %}
+                    {% assign href = rel[0] %}
+                {% endif %}
+                <div id="{{ href }}-tip" style="display:none">
+                    {% bibliography --query @*[key={{href}}] --template superseded --bibliography_list_tag p %}
                 </div>
             {% endfor %}
         {% endif %}

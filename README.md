@@ -15,21 +15,8 @@ For now, don't include bibfile.
 
 ## Questions
 
-- how separate conference articles and abstracts? both are `inproceedings`
-    - additional TYPE key in aux file
-    - currently, that shows up in the reference string, so maybe use a different key?
-- where does abstract text come from?
-- issue with last name Martin: https://github.com/inukshuk/bibtex-ruby/issues/169
-    - if necessary, can work around this by cycling through with javascript after but boy that's hacky
-    - actually: have prepare_bib insert `_-_` into names to prevent the parsing as dates, then have a shell script use sudo to remove that after the build
 - multiple people with same last name, e.g., Wang
-- what is the COPY key in aux?
 - OMIT in aux?
-- send me php code to see logic for creation of abstract page?
-- link to e.g., Liam's website on abstract page?
-    - same with journal link
-- have prepare_bib raise informative errors on some validation?
-
 - pdf-url field always included? or folder on webserver?
 - abstract-url field? looks redundant
 - how to handle chain of superseding? if A supersedes B which supersedes C, should C point to A or B? currently, A and B (original website just had B)
@@ -51,6 +38,9 @@ For now, don't include bibfile.
     - CONFABSTRACT is an extra type that comes from bibaux, handle that like tech report type
     - POSTER/TALK appear to still not exist
 - [x] popup
-- [ ] put together build script
+- [x] put together build script
+- [ ] confabstracts have their journal etc rendered wrong
 - [ ] include htmlproofer as post build step
+  - finish going through this
 - [ ] document "extras", in bibaux file and abstract folder
+- [ ] write a script to help validate input files?

@@ -15,7 +15,7 @@ vol.{{ include.value }}
 {% when "ps-url" %}
  | <a href="{{ include.value }}">PS</a>
 {% when "doi" %}
-<br>DOI: <a href="{{ include.value }}">{{ include.value }}</a><br>
+<br>DOI: <a href="https://dx.doi.org/{{ include.value }}">{{ include.value }}</a><br>
 {% when "copy" %}
 <br>© <i>{{ include.value }}</i><br>
 {% endcase %}
