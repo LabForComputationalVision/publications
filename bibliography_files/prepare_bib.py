@@ -59,7 +59,9 @@ def main(bib: str, out: str, aux: str | None,
                 author_str = ""
                 for i, author in enumerate(authors.value):
                     if url := author_url.get(author.replace(" ", "")):
-                        author_str += f"<i><a href={url}>{author}</a></i>"
+                        # turn the bare tilde into the latex version, so it gets
+                        # rendered correctly by bibtex-ruby
+                        author_str += f"<i><a href={url.replace("~", "\~{}")}>{author}</a></i>"
                     else:
                         author_str += f"<i>{author}</i>"
                     if i == len(authors.value) - 2:
@@ -86,7 +88,9 @@ def main(bib: str, out: str, aux: str | None,
             if journal:
                 journal = journal.value
                 if url := journal_url.get(journal.replace(" ", "").lower()):
-                    journal_str = f"<a href={url}>{journal}</a>"
+                    # turn the bare tilde into the latex version, so it gets
+                    # rendered correctly by bibtex-ruby
+                    journal_str = f"<a href={url.replace("~", "\~{}")}>{journal}</a>"
                 else:
                     journal_str = journal
                 entry["rendered_journal"] = journal_str
