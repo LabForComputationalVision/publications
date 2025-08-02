@@ -6,7 +6,7 @@ vol.{{ include.value }}
 ({{ include.value }}),
 {% when "pages" %}
  pp. {{ include.value }},
-{% when "address" %}
+{% when "address", "cnote", "note", %}
 {{ include.value }},
 {% when "other" %}
 <br>{{ include.value }}
@@ -15,6 +15,8 @@ vol.{{ include.value }}
 {% when "ps-url" %}
  | <a href="{{ include.value }}">PS</a>
 {% when "doi" %}
- <p>DOI: <a href="{{ include.value }}">{{ include.value }}</a></p>
+<br>DOI: <a href="{{ include.value }}">{{ include.value }}</a><br>
+{% when "copy" %}
+<br>© <i>{{ include.value }}</i><br>
 {% endcase %}
 {% endif %}

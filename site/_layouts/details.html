@@ -8,8 +8,10 @@
     <body>
         <h2>{{ page.entry.title }}</h2>
         <h3>{{ page.entry.rendered_author }}</h3>
-        {% include reference.html entry=page.entry mode="details" %}<br>
-        {% include finicky_bits.html details="doi" value=page.entry.doi %}
+        {% include reference.html entry=page.entry mode="details" -%}
+        {%- include finicky_bits.html details="copy" value=page.entry.copy -%}
+        {%- include finicky_bits.html details="other" value=page.entry.other -%}
+        {%- include finicky_bits.html details="doi" value=page.entry.doi -%}
 
         {%-  if page.entry.superseded_by -%}
             <p>This paper has been superseded by:<br>
@@ -22,24 +24,23 @@
             </p>
         {%- endif -%}
 
-        <div id="text3" style="display:inline;">Bibtex: <a id="showhide" href="javascript:void(0)" onClick="javascript:show_hide()">[show]</a><br>
+        <br><div id="text3" style="display:inline;">BibTeX: <a id="showhide" href="javascript:void(0)" onClick="javascript:show_hide()">[show]</a><br>
             <div id="bibtex" style="display:none;">
                 <pre size="-1">{{ page.entry.original_bibtex }}</pre>
             </div>
         </div>
 
-        <p>Download:
+        Download:
+        <li>
+            <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
+        </li>
+        {% assign download = page.entry.download | split: '||'  %}
+        {% for dl in download %}
+            {% assign dl_split = dl | split: '|' %}
             <li>
-                <a href="{{ page.entry.pdf-url }}">Reprint (pdf)</a>
+                <a href="{{ dl_split[1] }}">{{ dl_split[0] }}</a>
             </li>
-            {% assign download = page.entry.download | split: '||'  %}
-            {% for dl in download %}
-                {% assign dl_split = dl | split: '|' %}
-                <li>
-                    <a href="{{ dl_split[1] }}">{{ dl_split[0] }}</a>
-                </li>
-            {% endfor %}
-        </p>
+        {% endfor %}
 
         <hr size="1" noshade="">
         <p>{{ page.entry.abstract }}</p>

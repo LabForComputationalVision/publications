@@ -27,7 +27,8 @@
   {{ include.entry.month | capitalize }} {{ include.entry.year }}.
 {% when "inproceedings" %}
   {%-  if include.mode == "details" -%}
-    Presented at <i>{{ include.entry.rendered_journal }}</i>,
+    {% include finicky_bits.html details="cnote" value=page.entry.cnote %}<br>
+    Published in <i>{{ include.entry.rendered_journal }}</i>,
   {%- else -%}
     <i>{{ include.entry.booktitle }}</i>,
   {%- endif -%}
@@ -37,7 +38,7 @@
   {{ include.entry.month | capitalize }} {{ include.entry.year }}.
 {% when "incollection" %}
   {%-  if include.mode == "details" -%}
-    Presented at <i>{{ include.entry.rendered_journal }}</i>,
+    Published in <i>{{ include.entry.rendered_journal }}</i>,
   {%- else -%}
     <i>{{ include.entry.booktitle }}</i>,
   {%- endif -%}
