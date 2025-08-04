@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-import pathlib
 import argparse
-import subprocess
+import pathlib
+
 import bibtexparser
-from bibtexparser.model import Field
 import bibtexparser.middlewares as m
+from bibtexparser.model import Field
 
 TRANSLATE_BRACKETS = str.maketrans({"{": r"\{", "}": r"\}"})
+
 
 class AddFirstAuthor(m.BlockMiddleware):
     def transform_entry(self, entry, *args, **kwargs):
@@ -26,6 +27,7 @@ class AddFirstAuthor(m.BlockMiddleware):
             entry["first_author"] = author
         return entry
 
+
 # some entries have a "type" field, which confuses the parser for ruby-bibtex
 # (duplicate with "entry type", e.g., article, inproceedings)
 class ConvertType(m.BlockMiddleware):
@@ -35,23 +37,32 @@ class ConvertType(m.BlockMiddleware):
             entry["addt_type"] = type_field.value
         return entry
 
+
 class AddOrigBibtex(m.BlockMiddleware):
     def transform_entry(self, entry, *args, **kwargs):
         entry["original_bibtex"] = entry.raw.translate(TRANSLATE_BRACKETS)
         return entry
 
-def main(bib: str, out: str, aux: str | None,
-         abstracts: str | None, author_url: str | None,
-         journal_url: str | None):
 
+def main(
+    bib: str,
+    out: str,
+    aux: str | None,
+    abstracts: str | None,
+    author_url: str | None,
+    journal_url: str | None,
+):
     additional_middleware = []
 
-    authors = {}
     if author_url is not None:
         with open(author_url) as f:
             author_url = f.readlines()
-        author_url = {a.split("=")[0].strip().replace(" ", ""): a.split("=")[1].strip().strip('"').strip("'")
-                      for a in author_url if a.strip()}
+        author_url = {
+            a.split("=")[0].strip().replace(" ", ""):
+            a.split("=")[1].strip().strip('"').strip("'")
+            for a in author_url if a.strip()
+        }
+
     class RenderAuthors(m.BlockMiddleware):
         def transform_entry(self, entry, *args, **kwargs):
             authors = entry.get("author")
@@ -61,7 +72,8 @@ def main(bib: str, out: str, aux: str | None,
                     if url := author_url.get(author.replace(" ", "")):
                         # turn the bare tilde into the latex version, so it gets
                         # rendered correctly by bibtex-ruby
-                        author_str += f"<i><a href={url.replace("~", "\~{}")}>{author}</a></i>"
+                        url = url.replace('~', r'\~{}')
+                        author_str += f"<i><a href={url}>{author}</a></i>"
                     else:
                         author_str += f"<i>{author}</i>"
                     if i == len(authors.value) - 2:
@@ -72,14 +84,18 @@ def main(bib: str, out: str, aux: str | None,
                         author_str += ", "
                 entry["rendered_author"] = author_str
             return entry
+
     additional_middleware.append(RenderAuthors())
 
-    journals = {}
     if journal_url is not None:
         with open(journal_url) as f:
             journal_url = f.readlines()
-        journal_url = {j.split("=")[0].strip().replace(" ", "").lower(): j.split("=")[1].strip().strip('"').strip("'")
-                      for j in journal_url if j.strip()}
+        journal_url = {
+            j.split("=")[0].strip().replace(" ", "").lower():
+            j.split("=")[1].strip().strip('"').strip("'")
+            for j in journal_url if j.strip()
+        }
+
     class RenderJournals(m.BlockMiddleware):
         def transform_entry(self, entry, *args, **kwargs):
             journal = entry.get("journal")
@@ -90,15 +106,18 @@ def main(bib: str, out: str, aux: str | None,
                 if url := journal_url.get(journal.replace(" ", "").lower()):
                     # turn the bare tilde into the latex version, so it gets
                     # rendered correctly by bibtex-ruby
-                    journal_str = f"<a href={url.replace("~", "\~{}")}>{journal}</a>"
+                    url = url.replace(r'~', r'\~{}')
+                    journal_str = f"<a href={url}>{journal}</a>"
                 else:
                     journal_str = journal
                 entry["rendered_journal"] = journal_str
             return entry
+
     additional_middleware.append(RenderJournals())
 
     if abstracts is not None:
         abstracts = pathlib.Path(abstracts)
+
         class AddAbstract(m.BlockMiddleware):
             def transform_entry(self, entry, *args, **kwargs):
                 abstract_path = abstracts / f"{entry.key}-abstract.txt"
@@ -106,16 +125,27 @@ def main(bib: str, out: str, aux: str | None,
                     abstract = abstract_path.read_text()
                     entry["abstract"] = abstract
                 return entry
+
         additional_middleware.append(AddAbstract())
 
-    middlewares = [AddOrigBibtex(), m.NormalizeFieldKeys(), ConvertType(),
-                   m.SeparateCoAuthors()]
+    middlewares = [
+        AddOrigBibtex(),
+        m.NormalizeFieldKeys(),
+        ConvertType(),
+        m.SeparateCoAuthors(),
+    ]
     middlewares += additional_middleware
-    middlewares += [m.SplitNameParts(), AddFirstAuthor(), m.MergeNameParts(),
-                    m.MergeCoAuthors()]
+    middlewares += [
+        m.SplitNameParts(),
+        AddFirstAuthor(),
+        m.MergeNameParts(),
+        m.MergeCoAuthors(),
+    ]
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
     if aux is not None:
-        aux = bibtexparser.parse_file(aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType()])
+        aux = bibtexparser.parse_file(
+            aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType()]
+        )
         for aux_entry in aux.entries:
             entry = library.entries_dict[aux_entry.key]
             for field in aux_entry.fields:
@@ -131,7 +161,7 @@ def main(bib: str, out: str, aux: str | None,
                 v.append(field.value.strip('"').strip("'"))
                 fields[field.key.lower()] = v
             for k, v in fields.items():
-                entry.set_field(Field(k, '||'.join(v)))
+                entry.set_field(Field(k, "||".join(v)))
 
         # go through and add superseded_by to entries
         for entry in library.entries:
@@ -149,19 +179,34 @@ def main(bib: str, out: str, aux: str | None,
     bibtexparser.write_file(out, library)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prepare bibtex file for jekyll site")
-    parser.add_argument("bib",
-                        help="Path to the standard-formatted .bib file")
-    parser.add_argument("--out", "-o", default="site/_bibliography/references.bib",
-                        help="Path to save output at.")
-    parser.add_argument("--aux", default=None,
-                        help="Path to the .bibaux file with additional info. See Readme for details.")
-    parser.add_argument("--abstracts", default=None,
-                        help="Path to the folder containing abstract files. See Readme for details")
-    parser.add_argument("--author_url", default=None,
-                        help="Path to the txt file containing author urls. See Readme for details")
-    parser.add_argument("--journal_url", default=None,
-                        help="Path to the txt file containing journal urls. See Readme for details")
+    parser.add_argument("bib", help="Path to the standard-formatted .bib file")
+    parser.add_argument(
+        "--out",
+        "-o",
+        default="site/_bibliography/references.bib",
+        help="Path to save output at.",
+    )
+    parser.add_argument(
+        "--aux",
+        default=None,
+        help="Path to the .bibaux file with additional info. See Readme for details.",
+    )
+    parser.add_argument(
+        "--abstracts",
+        default=None,
+        help="Path to the folder containing abstract files. See Readme for details",
+    )
+    parser.add_argument(
+        "--author_url",
+        default=None,
+        help="Path to the txt file containing author urls. See Readme for details",
+    )
+    parser.add_argument(
+        "--journal_url",
+        default=None,
+        help="Path to the txt file containing journal urls. See Readme for details",
+    )
     args = vars(parser.parse_args())
     main(**args)
