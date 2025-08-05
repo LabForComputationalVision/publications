@@ -24,7 +24,7 @@ class AddFirstAuthor(m.BlockMiddleware):
                           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]:
                 if author.startswith(month):
                     author = author.replace(month, f"{month[:2]}-{month[2]}")
-            entry["first_author"] = author
+            entry["first_author"] = author.replace("*", "")
         return entry
 
 
@@ -63,7 +63,7 @@ def main(
 ):
     additional_middleware = []
 
-    if author_url is not None:
+    if author_url is not None and os.path.exists(author_url):
         with open(author_url) as f:
             author_url = f.readlines()
         author_url = {
@@ -93,7 +93,7 @@ def main(
 
     additional_middleware.append(RenderAuthors())
 
-    if journal_url is not None:
+    if journal_url is not None and os.path.exists(journal_url):
         with open(journal_url) as f:
             journal_url = f.readlines()
         journal_url = {
@@ -146,7 +146,7 @@ def main(
         CorrectTilde(),
     ]
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
-    if aux is not None:
+    if aux is not None and os.path.exists(aux):
         aux = bibtexparser.parse_file(
             aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType(), CorrectTilde()]
         )

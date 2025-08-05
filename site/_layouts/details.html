@@ -17,7 +17,7 @@
             <p>This paper has been superseded by:<br>
                 {% assign superseded = page.entry.superseded_by | split: '||'  %}
                 {% for supersed in superseded %}
-                    <a href="{{ supersed }}">
+                    <a href="{{ supersed }}.html">
                         {% bibliography --query @*[key={{supersed}}] --template superseded %}
                     </a>
                 {% endfor %}
