@@ -30,7 +30,7 @@ plugins:
 
 scholar:
   bibliography_template: bib
-  bibliography: test.bib
+  bibliography: references.bib
   group_by: none
   sort_by: year,month
   order: descending
