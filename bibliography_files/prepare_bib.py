@@ -44,6 +44,15 @@ class AddOrigBibtex(m.BlockMiddleware):
         return entry
 
 
+class CorrectTilde(m.BlockMiddleware):
+    # turn the bare tilde into the latex version, so it gets
+    # rendered correctly by bibtex-ruby
+    def transform_entry(self, entry, *args, **kwargs):
+        for field in entry.fields:
+            field.value = field.value.replace('~', r'\~{}')
+        return entry
+
+
 def main(
     bib: str,
     out: str,
@@ -70,9 +79,6 @@ def main(
                 author_str = ""
                 for i, author in enumerate(authors.value):
                     if url := author_url.get(author.replace(" ", "")):
-                        # turn the bare tilde into the latex version, so it gets
-                        # rendered correctly by bibtex-ruby
-                        url = url.replace('~', r'\~{}')
                         author_str += f"<i><a href={url}>{author}</a></i>"
                     else:
                         author_str += f"<i>{author}</i>"
@@ -104,9 +110,6 @@ def main(
             if journal:
                 journal = journal.value
                 if url := journal_url.get(journal.replace(" ", "").lower()):
-                    # turn the bare tilde into the latex version, so it gets
-                    # rendered correctly by bibtex-ruby
-                    url = url.replace(r'~', r'\~{}')
                     journal_str = f"<a href={url}>{journal}</a>"
                 else:
                     journal_str = journal
@@ -140,11 +143,12 @@ def main(
         AddFirstAuthor(),
         m.MergeNameParts(),
         m.MergeCoAuthors(),
+        CorrectTilde(),
     ]
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
     if aux is not None:
         aux = bibtexparser.parse_file(
-            aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType()]
+            aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType(), CorrectTilde()]
         )
         for aux_entry in aux.entries:
             entry = library.entries_dict[aux_entry.key]
@@ -158,7 +162,9 @@ def main(
             fields = {}
             for field in aux_entry.fields:
                 v = fields.get(field.key.lower(), [])
-                v.append(field.value.strip('"').strip("'"))
+                v.append(field.value.strip('"').strip("'").replace('~', r'\~{}'))
+                # turn the bare tilde into the latex version, so it gets
+                # rendered correctly by bibtex-ruby
                 fields[field.key.lower()] = v
             for k, v in fields.items():
                 entry.set_field(Field(k, "||".join(v)))
