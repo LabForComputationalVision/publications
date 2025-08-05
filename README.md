@@ -1,6 +1,6 @@
 # publications
 
-This repo builds a static site to display publications from the Lab for Computational Vision. It does so with some python preprocessing using [bibtexparser 2.0](https://bibtexparser.readthedocs.io/), then builds the site with [jekyll](https://jekyllrb.com/) using the  [jekyll-sholar](https://github.com/inukshuk/jekyll-scholar) extension.
+This repo builds a static site to display publications from the Lab for Computational Vision. It does so with some python preprocessing using [bibtexparser 2.0](https://bibtexparser.readthedocs.io/), then builds the site with [jekyll](https://jekyllrb.com/) using the  [jekyll-scholar](https://github.com/inukshuk/jekyll-scholar) extension.
 
 ## Input files
 
@@ -53,6 +53,7 @@ The structure of the site is largely controlled by a small number of files, whic
     - cgi.media.mit.edu
 - some dead pages: replace with internet archive?
 - then some that look like they should be working but aren't, grep htmlproofer log to find
+- sort by at top of file, should those be buttons? radio input?
 
 ## Notes
 
@@ -83,5 +84,5 @@ The structure of the site is largely controlled by a small number of files, whic
 - [x] some of the abstracts include links to makeAbs.php, update
 - [ ] Simoncelli96c RELATED? unsure what they mean
 - [x] document "extras", in bibaux file and abstract folder
-- [ ] write a script to help validate input files?
+- [x] write a script to help validate input files?
     - check diffs, but I think it's largely unicode
