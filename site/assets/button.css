@@ -1,0 +1,95 @@
+/* // copied and edited from bootstrap */
+.btn {
+  --btn-padding-x: .75rem;
+  --btn-padding-y: .1rem;
+  --btn-font-family: helvetica,arial,sans-serif;
+  --btn-line-height: 1.5;
+  --btn-color: #ff0000;
+  --btn-hover-color: #ffff;
+  --btn-bg: transparent;
+  --btn-border-width: 1px;
+  --btn-border-color: #ff0000;
+  --btn-hover-border-color: #ff0000;
+  --btn-hover-bg: #ff0000;
+  --btn-border-radius: .375rem;
+  --btn-hover-border-color: transparent;
+  --btn-box-shadow: inset 0 1px 0 rgba(#ffff .15), 0 1px 1px rgba(#0000 .075);
+  --btn-disabled-opacity: .65;
+  --btn-focus-box-shadow: 0 0 0 .25rem #ffffff, .5);
+
+  display: inline-block;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  font-family: var(--btn-font-family);
+  line-height: var(--btn-line-height);
+  color: var(--btn-color);
+  text-align: center;
+  text-decoration: none;
+  white-space: none;
+  vertical-align: middle;
+  user-select: none;
+  border: var(--btn-border-width) solid var(--btn-border-color);
+  border-radius: var(--btn-border-radius);
+  margin-left: 1rem;
+
+  &:hover {
+    color: var(--btn-hover-color);
+    text-decoration: none;
+    background-color: var(--btn-hover-bg);
+    border-color: var(--btn-hover-border-color);
+  }
+
+  .btn-check + &:hover {
+    /* // override for the checkbox/radio buttons */
+    color: var(--btn-color);
+    background-color: var(--btn-bg);
+    border-color: var(--btn-border-color);
+  }
+
+  &:focus-visible {
+    color: var(--btn-hover-color);
+    border-color: var(--btn-hover-border-color);
+    outline: 0;
+    /* // Avoid using mixin so we can pass custom focus shadow properly */
+    box-shadow: var(--btn-focus-box-shadow);
+  }
+
+  .btn-check:focus-visible + & {
+    border-color: var(--btn-hover-border-color);
+    outline: 0;
+    /* // Avoid using mixin so we can pass custom focus shadow properly */
+    box-shadow: var(--btn-focus-box-shadow);
+  }
+
+  .btn-check:checked + &,
+  :not(.btn-check) + &:active,
+  &:first-child:active,
+  &.active,
+  &.show {
+    color: var(--btn-active-color);
+    background-color: var(--btn-active-bg);
+    /* // Remove CSS gradients if they're enabled */
+    background-image: none;
+    border-color: var(--btn-active-border-color);
+
+    &:focus-visible {
+      /* // Avoid using mixin so we can pass custom focus shadow properly */
+      box-shadow: var(--btn-focus-box-shadow);
+    }
+  }
+
+  .btn-check:checked:focus-visible + & {
+    /* // Avoid using mixin so we can pass custom focus shadow properly */
+    box-shadow: var(--btn-focus-box-shadow);
+  }
+
+  &:disabled,
+  &.disabled,
+  fieldset:disabled & {
+    color: var(--btn-disabled-color);
+    pointer-events: none;
+    background-color: var(--btn-disabled-bg);
+    background-image: none;
+    border-color: var(--btn-disabled-border-color);
+    opacity: var(--btn-disabled-opacity);
+  }
+}
