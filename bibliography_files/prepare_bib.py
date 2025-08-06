@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import os
 import pathlib
 
 import bibtexparser
@@ -49,7 +50,7 @@ class CorrectTilde(m.BlockMiddleware):
     # rendered correctly by bibtex-ruby
     def transform_entry(self, entry, *args, **kwargs):
         for field in entry.fields:
-            field.value = field.value.replace('~', r'\~{}')
+            field.value = field.value.replace("~", r"\~{}")
         return entry
 
 
@@ -148,7 +149,8 @@ def main(
     library = bibtexparser.parse_file(bib, append_middleware=middlewares)
     if aux is not None and os.path.exists(aux):
         aux = bibtexparser.parse_file(
-            aux, append_middleware=[m.NormalizeFieldKeys(), ConvertType(), CorrectTilde()]
+            aux,
+            append_middleware=[m.NormalizeFieldKeys(), ConvertType(), CorrectTilde()],
         )
         for aux_entry in aux.entries:
             entry = library.entries_dict[aux_entry.key]
@@ -162,7 +164,7 @@ def main(
             fields = {}
             for field in aux_entry.fields:
                 v = fields.get(field.key.lower(), [])
-                v.append(field.value.strip('"').strip("'").replace('~', r'\~{}'))
+                v.append(field.value.strip('"').strip("'").replace("~", r"\~{}"))
                 # turn the bare tilde into the latex version, so it gets
                 # rendered correctly by bibtex-ruby
                 fields[field.key.lower()] = v
