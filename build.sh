@@ -24,5 +24,4 @@ sed -E -i "s/(h2.*)'\{e\}/\1é/g" _site/publications/author.html
 sed -E -i "s/(h2.*)\`\{e\}/\1è/g" _site/publications/author.html
 
 # not sure how to get paths working correctly here
-bundle exec htmlproofer _site --ignore-urls "/cgi.media.mit.edu/,/sites.stat.columbia.edu/liam/" --checks Links,Scripts,Images --ignore-status-codes 403  > htmlproofer.log 2>&1
-bundle exec htmlproofer _site --ignore-urls "/cgi.media.mit.edu/,/sites.stat.columbia.edu/liam/" --checks Links,Scripts,Images --only-status-codes 403 > htmlproofer-403.log 2>&1
+bundle exec htmlproofer _site --ignore-urls "/cgi.media.mit.edu/,/sites.stat.columbia.edu/liam/" --checks Links,Scripts,Images > htmlproofer.log 2>&1

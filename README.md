@@ -44,16 +44,14 @@ The structure of the site is largely controlled by a small number of files, whic
 
 - multiple people with same last name, e.g., Wang
 - OMIT in aux?
-- pdf-url field always included? or folder on webserver?
-- abstract-url field? looks redundant
-- how to handle chain of superseding? if A supersedes B which supersedes C, should C point to A or B? currently, A and B (original website just had B)
-- what are POSTER/TALK? they don't seem to be used
+    - don't put them on the site
 - what's going on with the | in the journalURL file?
+    - unsure, double check
 - missing urls:
-    - cgi.media.mit.edu
-- some dead pages: replace with internet archive?
+    - cgi.media.mit.edu: old MIT tech reports
 - then some that look like they should be working but aren't, grep htmlproofer log to find
-- sort by at top of file, should those be buttons? radio input?
+    - [ ] send all missing files to Eero, he'll look into it
+- CONFABSTRACT showing up in reference string
 
 ## Notes
 
