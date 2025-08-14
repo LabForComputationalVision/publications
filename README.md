@@ -27,7 +27,9 @@ All urls should be `https`, to make `htmlproofer` happy.
 - Run `bundle install` to install all the missing gems listed in the `Gemfile`.
 - Create a python environment and install `bibliography_files/requirements.txt` (`pip install -r bibliography_files/requirements.txt`)
 - From the root directory, run the included build script: `./build.sh`. This will create the site in `_site/publications`.
-- Navigate to `_site` (`cd _site`) and launch a webserver (`python -m http.server 4000`), then open `localhost:4000` in your browser.
+- Either:
+    - Navigate to `_site` (`cd _site`) and launch a webserver (`python -m http.server 4000`), then open `localhost:4000` in your browser.
+    - Copy over the `_site` directory to your webserver.
 
 ## Understanding what's happening
 
@@ -43,14 +45,11 @@ The structure of the site is largely controlled by a small number of files, whic
 ## Questions
 
 - multiple people with same last name, e.g., Wang
-- OMIT in aux?
-    - don't put them on the site
 - what's going on with the | in the journalURL file?
-    - unsure, double check
+    - unsure, double check old site
 - missing urls:
     - cgi.media.mit.edu: old MIT tech reports
 - then some that look like they should be working but aren't, grep htmlproofer log to find
-    - [ ] send all missing files to Eero, he'll look into it
 - CONFABSTRACT showing up in reference string
 
 ## Notes
