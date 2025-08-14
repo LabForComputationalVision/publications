@@ -181,6 +181,8 @@ def main(
                     else:
                         superseded = ""
                     old_entry.set_field(Field("superseded_by", entry.key + superseded))
+            if entry.fields_dict.get("omit"):
+                library.remove(entry)
 
     # remove all comments
     library.remove(library.comments)
