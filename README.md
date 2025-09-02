@@ -37,7 +37,7 @@ The build script does several things:
 - Checks input files for non-unicode characters, raising error code 1 if any are found.
 - Runs `bibliography_files/prepare_bib.py`, which cleans up the bibtex file, merges it with the bibaux file, adds in additional information (like urls and abstracts) and saves all this to the location where jekyll expects it.
 - Calls `jekyll build` to create the static site.
-- Calls `sed` to deal with some jekyll-scholar parsing issues (which may eventually get fixed: [1](https://github.com/inukshuk/jekyll-scholar/issues/367), [2](https://github.com/inukshuk/jekyll-scholar/issues/366)).
+- Calls `sed` to deal with a jekyll-scholar parsing issue (which [may eventually get fixed](https://github.com/inukshuk/jekyll-scholar/issues/367)).
 - Calls [htmlproofer](https://github.com/gjtorikian/html-proofer) to check for broken html, redirecting the output to `htmlproofer.log`.
 
 The structure of the site is largely controlled by a small number of files, which tell jekyll-scholar how to format the references and detail pages: `site/_layouts/bib.html` (how to format the entries on the main bibliography pages), `site/_layouts/details.html` (how to create the details page for each entry),`site/_includes/reference.html` (the rendering that is shared between the two of these). If you wish to make changes here, looking at the reference for the [liquid templating language](https://shopify.github.io/liquid/) used by jekyll will be helpful, though note that not all features (e.g., `renders`) are included in jekyll's variant.
@@ -59,7 +59,6 @@ The structure of the site is largely controlled by a small number of files, whic
 ## TODO
 
 - [ ] open issues: 
-  - [ ] [last name Martin](https://github.com/inukshuk/jekyll-scholar/issues/366) parsed as date
   - [ ] [group names](https://github.com/inukshuk/jekyll-scholar/issues/367) not being rendered correctly
 - [x] both those can be fixed by running sed afterwards if necessary
 - [x] author and journal urls
