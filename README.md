@@ -50,7 +50,6 @@ The structure of the site is largely controlled by a small number of files, whic
 - missing urls:
     - cgi.media.mit.edu: old MIT tech reports
 - then some that look like they should be working but aren't, grep htmlproofer log to find
-- CONFABSTRACT showing up in reference string
 
 ## Notes
 
