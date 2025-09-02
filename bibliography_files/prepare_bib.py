@@ -145,6 +145,8 @@ def main(
     if aux is not None and os.path.exists(aux):
         aux = bibtexparser.parse_file(
             aux,
+            # these don't get applied to failed blocks, so make sure to do the
+            # same thing in the for loop through failed blocks below
             append_middleware=[m.NormalizeFieldKeys(), ConvertType(), CorrectTilde()],
         )
         for aux_entry in aux.entries:
@@ -157,12 +159,17 @@ def main(
             aux_entry = block.ignore_error_block
             entry = library.entries_dict[aux_entry.key]
             fields = {}
+            # need to do the same thing all the middlewares above do:
             for field in aux_entry.fields:
-                v = fields.get(field.key.lower(), [])
+                # NormalizeFieldKeys
+                key = field.key.lower()
+                v = fields.get(key, [])
+                # CorrectTilde
                 v.append(field.value.strip('"').strip("'").replace("~", r"\~{}"))
-                # turn the bare tilde into the latex version, so it gets
-                # rendered correctly by bibtex-ruby
-                fields[field.key.lower()] = v
+                # ConvertType
+                if key == "type":
+                    key = "addt_type"
+                fields[key] = v
             for k, v in fields.items():
                 entry.set_field(Field(k, "||".join(v)))
 
