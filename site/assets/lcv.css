@@ -59,3 +59,8 @@ h1.lcv { margin: 0px;
 	display: none; }
 
 pre.tight { margin: 0px; }
+
+div#links {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
