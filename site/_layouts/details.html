@@ -76,18 +76,23 @@
         {% endif %}
         {% if page.entry.related %}
             {% assign related = page.entry.related | split: '||'  %}
-            <li>
-                Related Publications:
-                {%- for relat in related -%}
-                    {%- unless forloop.first %},{%- endunless %}
-                    {% assign rel = relat | split: '|'  %}
-                    {% if rel.size > 1 %}
-                        {% assign href = rel[1] %}
-                    {% else %}
-                        {% assign href = rel[0] %}
-                    {% endif %}
-                    <a class="needs-tips" id="{{ href }}" href="{{ href }}.html">{{ rel[0] }}</a>
-                {%- endfor -%}
+            <li>Related Publications:
+                <ul style="margin: 0;">
+                    {%- for relat in related -%}
+                        <li>
+                            {% assign rel = relat | split: '|'  %}
+                            {% if rel.size > 1 %}
+                                {{ rel[0] }}:
+                                {% assign length = rel | size %}
+                                {% assign rel = rel | slice: 1, length  %}
+                            {% endif %}
+                            {%- for r in rel -%}
+                                {%- unless forloop.first %},{%- endunless %}
+                                <a class="needs-tips" id="{{ r }}" href="{{ r }}.html">{{ r }}</a>
+                            {%- endfor -%}
+                        </li>
+                    {%- endfor -%}
+                </ul>
             </li>
             {% for relat in related %}
                 {% assign rel = relat | split: '|' %}
