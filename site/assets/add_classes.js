@@ -6,7 +6,7 @@ $.when( $.ready ).then(function() {
     group_headers_text = group_headers_text.map(function(e) {
         return "<a href='#"+ e +"'>" + e + "</a>"
     })
-    group_headers.first().before(
+    group_headers.parent().before(
         "<div id=links>"+ group_headers_text.join(" | ") +"</div>"
     )
     group_headers.wrap(function() {

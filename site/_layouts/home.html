@@ -11,9 +11,14 @@ layout: default
       <tr>
         <td colspan="2">
           Sort by:
-            <a class="btn" role="button" href="index.html">Year</a>
-            <a class="btn" role="button" href="type.html">Type</a>
-            <a class="btn" role="button" href="author.html">First Author</a>
+          <span id="page-radios">
+            <input class="sort-radio" type="radio" id="radio-year" onclick="window.location='index.html'"/>
+            <label class="sort-radio" for="radio-year">Year</label>
+            <input class="sort-radio" type="radio" id="radio-type" onclick="window.location='type.html'"/>
+            <label class="sort-radio" for="radio-type">Type</label>
+            <input class="sort-radio" type="radio" id="radio-author" onclick="window.location='author.html'"/>
+            <label for="radio-author">First Author</label>
+          </span>
         </td>
       </tr>
 
