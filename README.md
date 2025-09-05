@@ -28,7 +28,7 @@ All urls should be `https`, to make `htmlproofer` happy.
 - Create a python environment and install `bibliography_files/requirements.txt` (`pip install -r bibliography_files/requirements.txt`)
 - From the root directory, run the included build script: `./build.sh`. This will create the site in `_site/publications`.
 - Either:
-    - Navigate to `_site` (`cd _site`) and launch a webserver (`python -m http.server 4000`), then open `localhost:4000` in your browser.
+    - Navigate to `_site` (`cd _site`) and launch a webserver (`python -m http.server 4000`), then open `localhost:4000/publications` in your browser.
     - Copy over the `_site` directory to your webserver.
 
 ## Understanding what's happening
