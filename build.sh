@@ -6,6 +6,14 @@ grep -axv '.*' bibliography_files/simoncelli.bibaux && exit 1
 grep -axv '.*' bibliography_files/*txt && exit 1
 grep -axv '.*' bibliography_files/abstracts/*txt && exit 1
 
+
+python -c 'import bibtexparser'
+val=$?
+if [[ $val -ne 0 ]]; then
+    echo "bibtexparser not found -- did you activate your python environment? run: source .venv/bin/activate"
+    exit 1
+fi
+
 python bibliography_files/prepare_bib.py bibliography_files/simoncelli.bib --aux bibliography_files/simoncelli.bibaux --abstracts bibliography_files/abstracts/ --author_url bibliography_files/authorURL.txt --journal_url bibliography_files/journalURL.txt
 bundle exec jekyll build -d ./_site/publications
 sed -E -i.backup "s/(h2.*)'\{e\}/\1é/g" _site/publications/author.html
